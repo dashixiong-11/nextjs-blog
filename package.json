@@ -6,9 +6,9 @@
     "dev": "next dev & babel -w ./src --out-dir dist --extensions .ts,.tsx",
     "build": "next build",
     "start": "next start",
-    "typeorm:build": "",
-    "migration:run": "typeorm migration:run",
-    "migration:revert": "typeorm migration:revert",
+    "m:create": "typeorm migration:create",
+    "m:run": "typeorm migration:run",
+    "m:revert": "typeorm migration:revert",
     "entity:create": "typeorm entity:create"
   },
   "dependencies": {
