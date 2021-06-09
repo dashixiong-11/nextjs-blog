@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CreatePosts1623075070940 = void 0;
+exports.CreateUsers1623243298688 = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -17,12 +17,12 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _typeorm = require("typeorm");
 
-var CreatePosts1623075070940 = /*#__PURE__*/function () {
-  function CreatePosts1623075070940() {
-    (0, _classCallCheck2["default"])(this, CreatePosts1623075070940);
+var CreateUsers1623243298688 = /*#__PURE__*/function () {
+  function CreateUsers1623243298688() {
+    (0, _classCallCheck2["default"])(this, CreateUsers1623243298688);
   }
 
-  (0, _createClass2["default"])(CreatePosts1623075070940, [{
+  (0, _createClass2["default"])(CreateUsers1623243298688, [{
     key: "up",
     value: function () {
       var _up = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(queryRunner) {
@@ -32,7 +32,7 @@ var CreatePosts1623075070940 = /*#__PURE__*/function () {
               case 0:
                 _context.next = 2;
                 return queryRunner.createTable(new _typeorm.Table({
-                  name: 'posts',
+                  name: 'users',
                   columns: [{
                     name: 'id',
                     isGenerated: true,
@@ -43,11 +43,18 @@ var CreatePosts1623075070940 = /*#__PURE__*/function () {
                     name: 'username',
                     type: 'varchar'
                   }, {
-                    name: 'password_digest',
+                    name: 'passwordDigest',
                     type: 'varchar'
                   }, {
-                    name: 'author_id',
-                    type: 'int'
+                    name: 'CreateAt',
+                    type: 'timestamp',
+                    isNullable: false,
+                    "default": 'now()'
+                  }, {
+                    name: 'UpdateAt',
+                    type: 'timestamp',
+                    isNullable: false,
+                    "default": 'now()'
                   }]
                 }));
 
@@ -77,7 +84,7 @@ var CreatePosts1623075070940 = /*#__PURE__*/function () {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return queryRunner.dropTable('posts');
+                return queryRunner.dropTable('users');
 
               case 2:
                 return _context2.abrupt("return", _context2.sent);
@@ -97,7 +104,7 @@ var CreatePosts1623075070940 = /*#__PURE__*/function () {
       return down;
     }()
   }]);
-  return CreatePosts1623075070940;
+  return CreateUsers1623243298688;
 }();
 
-exports.CreatePosts1623075070940 = CreatePosts1623075070940;
+exports.CreateUsers1623243298688 = CreateUsers1623243298688;
