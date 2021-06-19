@@ -1,21 +1,29 @@
-import {Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne,OneToMany} from "typeorm";
+import {
+    Entity,
+    Column,
+    CreateDateColumn,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+    ManyToOne,
+    OneToMany
+} from "typeorm";
 import {User} from "./User";
 import {Comment} from "./Comment";
 
-@Entity()
+@Entity('posts')
 export class Post {
     @PrimaryGeneratedColumn('increment')
-    id: string;
+    id: number;
     @Column('varchar')
     title: string;
     @Column('text')
-    content: string
-    @CreateDateColumn('time')
-    createAt: Date;
-    @UpdateDateColumn('time')
-    updateAt: Date;
+    content: string;
+    @CreateDateColumn()
+    createdAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date;
     @ManyToOne(type => User, user => user.posts)
-    author: User
+    author: User;
     @OneToMany(type => Comment, comment => comment.post)
-    comments:Comment[]
+    comments: Comment[];
 }
