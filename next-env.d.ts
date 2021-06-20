@@ -10,7 +10,8 @@ declare module "*.png"{
     export default value
 }
 type Props = {
-    browser:{name:string,version:string,major:string}
+    browser:{name:string,version:string,major:string},
+    posts:Post[]
 }
 type Post = {
     id: string;
