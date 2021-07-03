@@ -9,20 +9,56 @@ import Link from "next/link";
 const index: NextPage<Props> = (props) => {
     const {posts} = props
 
-    return (
+    return <>
         <div>
             <Head>
                 <title>Create Next App</title>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-            <main>
-                <img src={mountain} style={{width: '100%'}} alt=""/>
-            </main>
+            <div className='blog-name'>awat</div>
             <ul> {posts.map(p => <Link key={p.id} href={`/blog/${p.id}`}>
                 <a> {p.title}   </a>
             </Link>)} </ul>
         </div>
-    )
+        <style jsx>
+            {`
+  .banner-wrapper{
+    width: 100%;
+    height: 240px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    overflow: hidden;
+  }
+  .blog-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
+  color: #fff;
+  height: 300px;
+  position: relative;
+  cursor: pointer;
+  }
+  .blog-name:before{
+  background-image: url('/shan.jpeg');
+  background-size:cover;
+  background-position-y:center;
+  background-position-x:center;
+  background-repeat: no-repeat;
+  position: absolute;
+  content: '';
+  z-index: -1;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  filter: blur(2px);
+  }
+`}
+
+        </style>
+    </>
 }
 export default index
 
