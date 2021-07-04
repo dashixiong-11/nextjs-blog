@@ -1,5 +1,8 @@
 import {NextApiHandler} from 'next';
 import {SignIn} from "../../../src/modal/SignIn";
+import {theSession} from '../../../lib/TheSession'
+
+
 
 const Sessions: NextApiHandler = async (req, res) => {
     res.setHeader('Content-type', 'application/json; charset=utf-8')
@@ -12,6 +15,8 @@ const Sessions: NextApiHandler = async (req, res) => {
         res.statusCode = 422
         res.end(JSON.stringify(signIn.errors))
     } else {
+        req.session.set('currentUser',signIn.user)
+        await req.session.save()
         res.statusCode = 200
         res.end(JSON.stringify(signIn.user))
     }
@@ -19,5 +24,5 @@ const Sessions: NextApiHandler = async (req, res) => {
     // res.end()
 }
 
-export default Sessions
+export default theSession(Sessions)
 

@@ -1,6 +1,5 @@
 import React from "react";
 import Head from 'next/head'
-import mountain from 'assets/imgs/shan.jpeg'
 import {GetServerSideProps, NextPage} from "next";
 import {getDatabaseConnection} from "../lib/getDatabaseConnection";
 import {Post} from "../src/entity/Post";

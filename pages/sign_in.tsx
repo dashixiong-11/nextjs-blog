@@ -1,9 +1,11 @@
 import React, {useCallback, useState} from "react";
 import {NextPage} from "next";
-import axios, { AxiosResponse} from 'axios'
+import axios, {AxiosResponse} from 'axios'
+import {User} from "../src/entity/User";
+import theSession from "../lib/TheSession";
 
 
-const SignIn: NextPage = () => {
+const SignIn: NextPage<{ user: User }> = (props) => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -14,10 +16,9 @@ const SignIn: NextPage = () => {
     })
     const onSubmit = useCallback((e) => {
         e.preventDefault()
-        axios.post('/api/v1/sessions', formData).then((
-        ) => {
+        axios.post('/api/v1/sessions', formData).then(() => {
             window.alert('登录成功')
-            // window.location.href = '/index'
+            window.location.href = '/'
         }, err => {
             if (err.response) {
                 const response: AxiosResponse = err.response
@@ -30,6 +31,7 @@ const SignIn: NextPage = () => {
 
     return <>
         <h1>登录</h1>
+        当前登录用户：{props.user.username}
         <form onSubmit={onSubmit}>
             <div>
                 <label>用户名
@@ -57,3 +59,14 @@ const SignIn: NextPage = () => {
 }
 
 export default SignIn
+
+// @ts-ignore
+export const getServerSideProps: GetServerSideProps = theSession(async (context) => {
+    // @ts-ignore
+    const user = context.req.session.get('currentUser');
+    return {
+        props: {
+            user: JSON.parse(JSON.stringify(user))
+        }
+    };
+});

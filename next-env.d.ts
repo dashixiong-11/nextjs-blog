@@ -1,16 +1,18 @@
 /// <reference types="next" />
 /// <reference types="next/types/global" />
-declare module "*.jpeg"{
-    const value:string
+import * as next from 'next'
+
+declare module "*.jpeg" {
+    const value: string
     export default value
 }
 
-declare module "*.png"{
-    const value:string
+declare module "*.png" {
+    const value: string
     export default value
 }
 type Props = {
-    posts:Post[]
+    posts: Post[]
 }
 type Post = {
     id: string;
@@ -18,4 +20,11 @@ type Post = {
     title: string;
     content: string;
     htmlContent: string;
+}
+declare module 'next' {
+    import {Session} from 'next-iron-session';
+
+    interface NextApiRequest {
+        session: Session
+    }
 }
