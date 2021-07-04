@@ -1,9 +1,9 @@
 import React, {useCallback, useState} from "react";
 import {NextPage} from "next";
-import axios, {AxiosError, AxiosResponse} from 'axios'
+import axios, { AxiosResponse} from 'axios'
 
 
-const SignUp: NextPage = () => {
+const SignIn: NextPage = () => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -14,9 +14,10 @@ const SignUp: NextPage = () => {
     })
     const onSubmit = useCallback((e) => {
         e.preventDefault()
-        axios.post('/api/v1/users', formData).then(() => {
-            window.alert('注册成功')
-            window.location.href = '/blog/sign_in'
+        axios.post('/api/v1/sessions', formData).then((
+        ) => {
+            window.alert('登录成功')
+            // window.location.href = '/index'
         }, err => {
             if (err.response) {
                 const response: AxiosResponse = err.response
@@ -24,12 +25,11 @@ const SignUp: NextPage = () => {
                     setErrors(response.data)
                 }
             }
-            console.log(err.response);
         })
     }, [formData])
 
     return <>
-        <h1>注册</h1>
+        <h1>登录</h1>
         <form onSubmit={onSubmit}>
             <div>
                 <label>用户名
@@ -51,19 +51,9 @@ const SignUp: NextPage = () => {
                     {errors.password?.length > 0 && errors.password.join('')}
                 </label>
             </div>
-            <div>
-                <label>确认密码
-                    <input type="password" value={formData.passwordConfirmation}
-                           onChange={e => setFormData({
-                               ...formData,
-                               passwordConfirmation: e.target.value
-                           })}/>
-                    {errors.passwordConfirmation?.length > 0 && errors.passwordConfirmation.join('')}
-                </label>
-            </div>
-            <button type='submit'>注册</button>
+            <button type='submit'>登录</button>
         </form>
     </>
 }
 
-export default SignUp
+export default SignIn
