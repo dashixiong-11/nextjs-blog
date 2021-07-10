@@ -1,7 +1,7 @@
-import {NextApiHandler} from "next";
+import {GetServerSideProps, NextApiHandler} from "next";
 import {withIronSession} from "next-iron-session";
 
-export const theSession = (handler: NextApiHandler) => {
+export const theSession = (handler: NextApiHandler | GetServerSideProps) => {
     return withIronSession(handler, {
         // password: process.env.SECRET_COOKIE_PASSWORD,
         password: process.env.SECRET,
