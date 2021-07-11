@@ -7,11 +7,11 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
+import _ from 'lodash';
 import {Post} from './Post';
 import {Comment} from './Comment';
 import {getDatabaseConnection} from "../../lib/getDatabaseConnection";
 import md5 from "md5";
-import _ from 'lodash'
 
 @Entity('users')
 export class User {
@@ -25,9 +25,9 @@ export class User {
     createdAt: Date;
     @UpdateDateColumn()
     updatedAt: Date;
-    @OneToMany(type => Post, post => post.author)
+    @OneToMany('Post', 'author')
     posts: Post[];
-    @OneToMany(type => Comment, comment => comment.user)
+    @OneToMany( 'Comment', 'user')
     comments: Comment[]
 
     password: string;

@@ -1,12 +1,20 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {getPosts} from 'lib/getPosts'
+import theSession from "../../../lib/TheSession";
+import {getDatabaseConnection} from "../../../lib/getDatabaseConnection";
+import {Post} from "../../../src/entity/Post";
 
-const Posts = async (req:NextApiRequest,res:NextApiResponse) => {
-    const posts = await getPosts()
-    res.statusCode = 200
-    res.setHeader('Content-Type','application/json')
-    res.write(JSON.stringify(posts))
-    res.end()
-}
+const Posts = theSession(async (req: NextApiRequest, res: NextApiResponse) => {
+    if (req.method === 'POST') {
+        const {title, content} = req.body;
+        const post = new Post();
+        post.title = title;
+        post.content = content;
+        const user = req.session.get('currentUser');
+        post.author = user;
+        const connection = await getDatabaseConnection();
+        await connection.manager.save(post);
+        res.json(post);
+    }
+})
 
-export default  Posts
+export default Posts
