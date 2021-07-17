@@ -10,6 +10,11 @@ const Posts = theSession(async (req: NextApiRequest, res: NextApiResponse) => {
         post.title = title;
         post.content = content;
         const user = req.session.get('currentUser');
+        if(!user){
+            res.statusCode = 401
+            res.end()
+            return
+        }
         post.author = user;
         const connection = await getDatabaseConnection();
         await connection.manager.save(post);

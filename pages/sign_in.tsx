@@ -1,9 +1,10 @@
-import React, {useCallback, useState} from "react";
+import React from "react";
 import {GetServerSideProps, GetServerSidePropsContext, NextPage} from "next";
 import axios from 'axios'
 import {User} from "../src/entity/User";
 import theSession from "../lib/TheSession";
 import {useForm} from "../hooks/useForm";
+import qs from 'querystring'
 
 
 const SignIn: NextPage<{ user: User }> = (props) => {
@@ -16,7 +17,8 @@ const SignIn: NextPage<{ user: User }> = (props) => {
             request: formData => axios.post('/api/v1/sessions', formData),
             successCallback: () => {
                 window.alert('登录成功')
-                window.location.href = '/'
+                const query = qs.parse(window.location.search.substring(1))
+                window.location.href = query.return_to.toString()
             }
         }
     })
@@ -35,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = theSession(async (context:
     const user = context.req.session.get('currentUser');
     return {
         props: {
-            user: JSON.parse(JSON.stringify(user))
+            user: JSON.parse(JSON.stringify(user || ''))
         }
     };
 });
