@@ -11,16 +11,6 @@ declare module "*.png" {
     const value: string
     export default value
 }
-type Props = {
-    posts: Post[]
-}
-type Post = {
-    id: string;
-    date: string;
-    title: string;
-    content: string;
-    htmlContent: string;
-}
 declare module 'next' {
     import {Session} from 'next-iron-session';
 
