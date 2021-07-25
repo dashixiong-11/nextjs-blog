@@ -26,7 +26,6 @@ const PostsIndex: NextPage<Props> = (props) => {
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>
                 <div className='blog-name'>awat</div>
-                <div>blog</div>
             </div>
             {pager}
             <ul> {posts.map(p => <Link key={p.id} href={`/posts/${p.id}`}>
@@ -53,7 +52,6 @@ const PostsIndex: NextPage<Props> = (props) => {
   position: relative;
   cursor: pointer;
   }
-  /*
   .blog-name:before{
   background-image: url('/shan.jpeg');
   background-size:cover;
@@ -69,7 +67,6 @@ const PostsIndex: NextPage<Props> = (props) => {
   width: 100%;
   filter: blur(2px);
   }
-  */
 `}
 
         </style>
