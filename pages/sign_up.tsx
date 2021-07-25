@@ -12,7 +12,7 @@ const SignUp: NextPage = () => {
             {label: '确认密码', type: 'password', key: 'passwordConfirmation'},],
         buttons: <button type="submit">提交</button>,
         submit: {
-            request: formData => axios.post('/api/v1/sessions', formData),
+            request: formData => axios.post('/api/v1/users', formData),
             successCallback: () => {
                 window.alert('注册成功')
                 window.location.href = '/sign_in'

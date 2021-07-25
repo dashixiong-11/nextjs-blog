@@ -26,6 +26,7 @@ const PostsIndex: NextPage<Props> = (props) => {
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>
                 <div className='blog-name'>awat</div>
+                <div>blog</div>
             </div>
             {pager}
             <ul> {posts.map(p => <Link key={p.id} href={`/posts/${p.id}`}>
