@@ -5,6 +5,7 @@ import {User} from "../src/entity/User";
 import theSession from "../lib/TheSession";
 import {useForm} from "../hooks/useForm";
 import qs from 'querystring'
+import Link from "next/link";
 
 
 const SignIn: NextPage<{ user: User }> = (props) => {
@@ -27,6 +28,7 @@ const SignIn: NextPage<{ user: User }> = (props) => {
         <h1>登录</h1>
         当前登录用户：{props.user.username}
         {form}
+        <p className='link'><Link href="/sign_up"><a>去注册</a></Link></p>
     </>
 }
 

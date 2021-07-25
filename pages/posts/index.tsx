@@ -28,7 +28,7 @@ const PostsIndex: NextPage<Props> = (props) => {
                 <div className='blog-name'>awat</div>
             </div>
             {pager}
-            <ul> {posts.map(p => <Link key={p.id} href={`/posts/${p.id}`}>
+            <ul> {posts.map(p => <Link key={p.id} href='/posts/[id]' as={`/posts/${p.id}`}>
                 <a> {p.title}   </a>
             </Link>)} </ul>
         </div>
