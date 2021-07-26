@@ -16,6 +16,7 @@ const Home: NextPage<{ user: User }> = (props) => {
             </header>
             <div className='cover'>
                 <div className='logo'>这是一个logo</div>
+                <div>我的博客</div>
                 <p className='link'><Link href="/posts"><a>查看博客</a></Link></p>
             </div>
             <style jsx>{`
