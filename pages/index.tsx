@@ -7,13 +7,6 @@ import {User} from "../src/entity/User";
 const Home: NextPage<{ user: User }> = (props) => {
     return (
         <>
-            <header className='header'>
-                {props.user ?
-                    <span style={{marginLeft:'auto'}}>当前用户：{props.user.username}</span> :
-                    <button>
-                        <Link href="/sign_in?return_to=/"><a>去登录</a></Link>
-                    </button>}
-            </header>
             <div className='cover'>
                 <div className='logo'>这是一个logo</div>
                 <div>我的博客</div>

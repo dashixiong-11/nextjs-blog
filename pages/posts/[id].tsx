@@ -1,8 +1,8 @@
 import React from "react";
-import {getPost, getPostIds} from "../../lib/getPosts";
 import {Post} from '../../src/entity/Post';
 import {getDatabaseConnection} from '../../lib/getDatabaseConnection';
 import {GetServerSideProps, NextPage} from "next";
+import Link from "next/link";
 
 type Props = {
     post: Post
@@ -11,9 +11,23 @@ const BlogContent: NextPage<Props> = (props) => {
     const {post} = props
     return <>
         <div>文章详情</div>
-        <h1>{post.title}</h1>
+        <div className='wrapper'>
+            <h1>{post.title}</h1>
+            <Link href="/posts/[id]/edit" as={`/posts/${post.id}/edit`}><a>编辑</a></Link>
+        </div>
         <article dangerouslySetInnerHTML={{__html: post.content}}>
         </article>
+        <style jsx>{ `
+          .wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+          }
+          .wrapper > button {
+            
+          }
+` }</style>
     </>
 }
 

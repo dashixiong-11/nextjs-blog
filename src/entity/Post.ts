@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import {User} from "./User";
 import {Comment} from "./Comment";
+import _ from "lodash";
 
 @Entity('posts')
 export class Post {
@@ -24,6 +25,26 @@ export class Post {
     updatedAt: Date;
     @ManyToOne('User', 'posts')
     author: User;
-    @OneToMany('Comment','post')
+    @OneToMany('Comment', 'post')
     comments: Comment[];
+
+    errors = {title: [] as string[], content: [] as string[]};
+
+
+    async validate() {
+        if (this.title.trim() === '') {
+            this.errors.title.push('文章标题不能为空')
+        }
+        if (this.content.trim() === '') {
+            this.errors.title.push('文章内容不能为空')
+        }
+    }
+
+    hasErrors() {
+        return !!Object.values(this.errors).find(v => v.length > 0)
+    }
+
+    toJSON() {
+        return _.omit(this, ['errors'])
+    }
 }

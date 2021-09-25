@@ -1,12 +1,16 @@
-import {GetServerSideProps, NextPage} from 'next';
+import {GetServerSideProps, GetServerSidePropsContext, NextPage} from 'next';
 import {UAParser} from 'ua-parser-js';
 import {getDatabaseConnection} from 'lib/getDatabaseConnection';
 import {Post} from 'src/entity/Post';
 import Link from 'next/link';
 import qs from 'querystring';
 import {usePager} from '../../hooks/usePager';
-import Head from "next/head";
 import React from "react";
+import theSession from "../../lib/TheSession";
+import {User} from "../../src/entity/User";
+import axios from "axios";
+import {useRouter} from 'next/router';
+
 
 type Props = {
     posts: Post[];
@@ -14,59 +18,92 @@ type Props = {
     perPage: number;
     page: number;
     totalPage: number;
+    user: User
 }
 const PostsIndex: NextPage<Props> = (props) => {
-    const {posts, count, page, totalPage} = props;
+    const router = useRouter()
+    const {posts, page, totalPage, user} = props;
     const {pager} = usePager({page, totalPage});
+    const deleteBlog = (id: number) => {
+        axios.delete(`/api/v1/posts/${id}`).then(() => {
+            window.alert('删除成功')
+            router.push('/posts')
+        }, () => {
+            window.alert('删除失败')
+        })
+    }
     return <>
-        <div>
+        <div className='posts'>
+            {/*
             <div>
-                <Head>
-                    <title>Create Next App</title>
-                    <link rel="icon" href="/favicon.ico"/>
-                </Head>
                 <div className='blog-name'>awat</div>
             </div>
+*/}
+            <div className='nav'>
+                {
+                    user.username ?
+                        <Link href='/posts/new' as={`/posts/new`}>
+                            <a> 写博客 </a>
+                        </Link> :
+                        <Link href='/sign_in' as={`/sign_in`}>
+                            <a> 登录 </a>
+                        </Link>
+                }
+            </div>
             {pager}
-            <ul> {posts.map(p => <Link key={p.id} href='/posts/[id]' as={`/posts/${p.id}`}>
-                <a> {p.title}   </a>
-            </Link>)} </ul>
+            <ul> {posts.map(p => <li key={p.id}>
+                <Link href='/posts/[id]' as={`/posts/${p.id}`}>
+                    <a> {p.title} </a>
+                </Link>
+                <a onClick={() => deleteBlog(p.id)}>删除</a>
+            </li>)} </ul>
         </div>
         <style jsx>
             {`
-  .banner-wrapper{
-    width: 100%;
-    height: 240px;
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    overflow: hidden;
-  }
-  .blog-name {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 70px;
-  color: #fff;
-  height: 300px;
-  position: relative;
-  cursor: pointer;
-  }
-  .blog-name:before{
-  background-image: url('/shan.jpeg');
-  background-size:cover;
-  background-position-y:center;
-  background-position-x:center;
-  background-repeat: no-repeat;
-  position: absolute;
-  content: '';
-  z-index: -1;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  filter: blur(2px);
-  }
+              .posts {
+                min-height: 100vh;
+                background: #f4f5f5;
+                padding: 20px 10%;
+              }
+              .posts > .nav {
+                text-align: end;
+              }
+              ul{
+                padding: 0;
+                margin: 1em 0 0; 
+                display: flex;
+                flex-direction: column;
+                
+              }
+               ul > a{
+                  border-bottom: 1px solid #999;
+                  margin-top: 1em;
+                  cursor: pointer;
+                }
+                ul > li {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  padding: 0.5em 0;
+                }
+              .banner-wrapper{
+                width: 100%;
+                height: 240px;
+                display: flex;
+                justify-content: center;
+                align-items: center; 
+                overflow: hidden;
+              }
+              .blog-name {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 70px;
+              color: #fff;
+              height: 300px;
+              position: relative;
+              cursor: pointer;
+              }
 `}
 
         </style>
@@ -74,7 +111,9 @@ const PostsIndex: NextPage<Props> = (props) => {
 };
 export default PostsIndex;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = theSession(async (context: GetServerSidePropsContext) => {
+    // @ts-ignore
+    const user = context.req.session.get('currentUser');
     const index = context.req.url.indexOf('?');
     const search = context.req.url.substr(index + 1);
     const query = qs.parse(search);
@@ -87,6 +126,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const result = new UAParser(ua).getResult();
     return {
         props: {
+            user: JSON.parse(JSON.stringify(user || '')),
             browser: result.browser,
             posts: JSON.parse(JSON.stringify(posts)),
             count: count,
@@ -94,4 +134,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             totalPage: Math.ceil(count / perPage)
         }
     };
-};
+})

@@ -1,0 +1,13 @@
+.nav {
+  color: red;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  padding: 10px 1em;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.h1 {
+  color: red;
+}
