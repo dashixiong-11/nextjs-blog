@@ -34,11 +34,6 @@ const PostsIndex: NextPage<Props> = (props) => {
     }
     return <>
         <div className='posts'>
-            {/*
-            <div>
-                <div className='blog-name'>awat</div>
-            </div>
-*/}
             <div className='nav'>
                 {
                     user.username ?
@@ -121,13 +116,10 @@ export const getServerSideProps: GetServerSideProps = theSession(async (context:
     const connection = await getDatabaseConnection();// 第一次链接能不能用 get
     const perPage = 2;
     const [posts, count] = await connection.manager.findAndCount(Post,
-        {skip: (page - 1) * perPage, take: perPage});
-    const ua = context.req.headers['user-agent'];
-    const result = new UAParser(ua).getResult();
+        {skip: (page - 1) * perPage, take: perPage, order: {id: 'ASC'}});
     return {
         props: {
             user: JSON.parse(JSON.stringify(user || '')),
-            browser: result.browser,
             posts: JSON.parse(JSON.stringify(posts)),
             count: count,
             perPage, page,

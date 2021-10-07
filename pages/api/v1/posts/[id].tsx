@@ -3,14 +3,9 @@ import theSession from "../../../../lib/TheSession";
 import {getDatabaseConnection} from '../../../../lib/getDatabaseConnection';
 
 const Posts: NextApiHandler = theSession(async (req, res) => {
-    console.log('req.method');
-    console.log(req.method);
     if (req.method === 'PATCH') {
         const connection = await getDatabaseConnection()
         const {title, content, id} = req.body
-        console.log('req.body');
-        console.log(req.body);
-        console.log(id);
         const post = await connection.manager.findOne<Post>('Post', id)
         post.title = title
         post.content = content

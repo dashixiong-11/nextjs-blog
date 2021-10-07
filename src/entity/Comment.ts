@@ -8,6 +8,8 @@ export class Comment {
     id: number;
     @Column('text')
     content: string;
+    // @Column('text')
+    // username: string;
     @ManyToOne('User', 'comments')
     user: User;
     @ManyToOne('Post','comments')
