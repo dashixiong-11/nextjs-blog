@@ -1,4 +1,3 @@
-
 import {MigrationInterface, QueryRunner, TableColumn} from 'typeorm';
 
 export class AddCreatedAtAndUpdatedAt1591208065141 implements MigrationInterface {

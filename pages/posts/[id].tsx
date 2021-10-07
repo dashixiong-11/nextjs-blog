@@ -8,12 +8,10 @@ import axios, {AxiosResponse} from "axios";
 
 type Props = {
     post: Post,
-    comments: Comment
+    comments: Comment[]
 }
 const BlogContent: NextPage<Props> = (props) => {
-    const {post,comments} = props
-    console.log('comments.user');
-    console.log(comments.user);
+    const {post, comments} = props
     const [commentContent, setCommentContent] = useState('')
     const onAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setCommentContent(e.currentTarget.value)
@@ -44,6 +42,9 @@ const BlogContent: NextPage<Props> = (props) => {
         <div className="post-comments">
             <h2>评论</h2>
             <div className="post-comments-content">
+                {comments.map(comment => <div>
+                    {comment.username + ' : ' + comment.content}
+                </div>)}
 
             </div>
         </div>

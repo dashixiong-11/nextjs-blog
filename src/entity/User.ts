@@ -27,7 +27,7 @@ export class User {
     updatedAt: Date;
     @OneToMany('Post', 'author')
     posts: Post[];
-    @OneToMany( 'Comment', 'user')
+    @OneToMany('Comment', 'user')
     comments: Comment[]
 
     password: string;
@@ -70,6 +70,6 @@ export class User {
     }
 
     toJSON() {
-        return _.omit(this, ['password', 'passwordConfirmation', 'passwordDigest','errors'])
+        return _.omit(this, ['password', 'passwordConfirmation', 'passwordDigest', 'errors'])
     }
 }

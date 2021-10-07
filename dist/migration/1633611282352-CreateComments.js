@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CreateComments1591207679470 = void 0;
+exports.CreateComments1633611282352 = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -17,12 +17,12 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _typeorm = require("typeorm");
 
-var CreateComments1591207679470 = /*#__PURE__*/function () {
-  function CreateComments1591207679470() {
-    (0, _classCallCheck2["default"])(this, CreateComments1591207679470);
+var CreateComments1633611282352 = /*#__PURE__*/function () {
+  function CreateComments1633611282352() {
+    (0, _classCallCheck2["default"])(this, CreateComments1633611282352);
   }
 
-  (0, _createClass2["default"])(CreateComments1591207679470, [{
+  (0, _createClass2["default"])(CreateComments1633611282352, [{
     key: "up",
     value: function () {
       var _up = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(queryRunner) {
@@ -40,14 +40,27 @@ var CreateComments1591207679470 = /*#__PURE__*/function () {
                     generationStrategy: 'increment',
                     isPrimary: true
                   }, {
-                    name: 'user_id',
+                    name: 'username',
+                    type: 'varchar'
+                  }, {
+                    name: 'userId',
                     type: 'int'
                   }, {
-                    name: 'post_id',
+                    name: 'postId',
                     type: 'int'
                   }, {
                     name: 'content',
                     type: 'text'
+                  }, {
+                    name: 'createdAt',
+                    type: 'timestamp',
+                    isNullable: false,
+                    "default": 'now()'
+                  }, {
+                    name: 'updatedAt',
+                    type: 'timestamp',
+                    isNullable: false,
+                    "default": 'now()'
                   }]
                 }));
 
@@ -97,7 +110,7 @@ var CreateComments1591207679470 = /*#__PURE__*/function () {
       return down;
     }()
   }]);
-  return CreateComments1591207679470;
+  return CreateComments1633611282352;
 }();
 
-exports.CreateComments1591207679470 = CreateComments1591207679470;
+exports.CreateComments1633611282352 = CreateComments1633611282352;
