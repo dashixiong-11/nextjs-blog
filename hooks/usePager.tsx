@@ -38,6 +38,13 @@ export const usePager = (options: Options) => {
             -ms-user-select:none; 
             user-select:none;
             margin-top: 1em;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            width: 100%;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
             }
             .page-wrapper > *{
               margin: 0 .5em;

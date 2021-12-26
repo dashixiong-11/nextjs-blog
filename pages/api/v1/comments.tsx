@@ -7,8 +7,6 @@ import {Post} from "../../../src/entity/Post";
 const Comments = theSession(async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const user = req.session.get('currentUser');
-        console.log('user');
-        console.log(user);
         if (!user) {
             res.statusCode = 401
             res.end()

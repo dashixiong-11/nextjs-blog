@@ -1,14 +1,15 @@
-import React, {useState} from "react";
+import React from "react";
 import {GetServerSideProps, GetServerSidePropsContext, NextPage} from "next";
 import axios from 'axios'
 import {User} from "../src/entity/User";
 import theSession from "../lib/TheSession";
 import {useForm} from "../hooks/useForm";
+import {useToast} from "../hooks/useToast";
 import qs from 'querystring'
 import Link from "next/link";
 
 const SignIn: NextPage<{ user: User }> = (props) => {
-
+    const {view, info} = useToast(1500)
     const {form} = useForm({
         initFormData: {username: '', password: ''},
         fields: [{label: '用户名', type: 'text', key: 'username'},
@@ -17,9 +18,10 @@ const SignIn: NextPage<{ user: User }> = (props) => {
         submit: {
             request: formData => axios.post('/api/v1/sessions', formData),
             successCallback: () => {
-                window.alert('登录成功')
-                const query = qs.parse(window.location.search.substring(1))
-                window.location.href = '/posts'
+                info('登录成功!',()=>{
+                    const query = qs.parse(window.location.search.substring(1))
+                    window.location.href = '/posts'
+                })
             }
         }
     })
@@ -29,6 +31,7 @@ const SignIn: NextPage<{ user: User }> = (props) => {
         {/*当前登录用户：{props.user.username}*/}
         {form}
         <p className='link'><Link href="/sign_up"><a>去注册</a></Link></p>
+        {view}
     </>
 }
 

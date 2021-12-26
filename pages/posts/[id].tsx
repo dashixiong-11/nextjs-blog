@@ -19,7 +19,7 @@ const BlogContent: NextPage<Props> = (props) => {
     const onSubmit = async () => {
         await axios.post('/api/v1/comments', {postId: post.id, content: commentContent}).then(() => {
             window.alert('评论成功')
-            // window.location.reload()
+            window.location.reload()
         }, error => {
             if (error.response) {
                 const response: AxiosResponse = error.response
@@ -42,7 +42,7 @@ const BlogContent: NextPage<Props> = (props) => {
         <div className="post-comments">
             <h2>评论</h2>
             <div className="post-comments-content">
-                {comments.map(comment => <div>
+                {comments.map(comment => <div key={comment.id}>
                     {comment.username + ' : ' + comment.content}
                 </div>)}
 

@@ -5,7 +5,7 @@ import {Post} from 'src/entity/Post';
 import Link from 'next/link';
 import qs from 'querystring';
 import {usePager} from '../../hooks/usePager';
-import React from "react";
+import React, {useEffect} from "react";
 import theSession from "../../lib/TheSession";
 import {User} from "../../src/entity/User";
 import axios from "axios";
@@ -45,13 +45,13 @@ const PostsIndex: NextPage<Props> = (props) => {
                         </Link>
                 }
             </div>
-            {pager}
             <ul> {posts.map(p => <li key={p.id}>
                 <Link href='/posts/[id]' as={`/posts/${p.id}`}>
                     <a> {p.title} </a>
                 </Link>
                 <a onClick={() => deleteBlog(p.id)}>删除</a>
             </li>)} </ul>
+                {pager}
         </div>
         <style jsx>
             {`
@@ -115,8 +115,11 @@ export const getServerSideProps: GetServerSideProps = theSession(async (context:
     const page = parseInt(query.page?.toString()) || 1;
     const connection = await getDatabaseConnection();// 第一次链接能不能用 get
     const perPage = 2;
-    const [posts, count] = await connection.manager.findAndCount(Post,
-        {skip: (page - 1) * perPage, take: perPage, order: {id: 'ASC'}});
+    const [posts, count] = await connection.manager.findAndCount(Post, {
+        skip: (page - 1) * perPage,
+        take: perPage,
+        order: {id: 'ASC'}
+    });
     return {
         props: {
             user: JSON.parse(JSON.stringify(user || '')),
