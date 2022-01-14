@@ -2,7 +2,6 @@ import {GetServerSideProps, NextPage} from "next";
 import React from "react";
 import {getDatabaseConnection} from "../../../lib/getDatabaseConnection";
 import {Post} from "../../../src/entity/Post";
-import {useEditor} from "../../../hooks/useEditor";
 
 type Props = {
     id: number,
@@ -10,13 +9,15 @@ type Props = {
 }
 const PostsEdit: NextPage<Props> = (props) => {
     const {id, post} = props
+/*
     const {Editor} = useEditor({
         method: 'patch', path: `/api/v1/posts/${id}`,
         title: post.title, content: post.content, id: id
     })
+*/
 
     return <>
-        {Editor}
+        <div></div>
     </>
 }
 

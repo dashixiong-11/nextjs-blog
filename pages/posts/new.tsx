@@ -1,20 +1,14 @@
 import React from "react";
 import {NextPage} from "next";
-import {useEditor} from "../../hooks/useEditor";
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic'
+// import {useEditorMd} from "../../hooks/useEditor";
+const MilkDown = dynamic( () => import('../../components/MilkDown/MilkDown'), { ssr: false } )
 
-let BraftEditor: any = dynamic(() => import('braft-editor').then((module: any) => {
-    BraftEditor = module.default
-    return BraftEditor
-}), {
-    ssr: false // 禁用服务端渲染
-})
-import 'braft-editor/dist/index.css'
 
 const PostsNew: NextPage = () => {
-    const {Editor} = useEditor({method: 'post', path: '/api/v1/posts'})
+    // const {EditorView} = useEditorMd({method: 'post', path: '/api/v1/posts'})
 
-    return (<div> {Editor} </div>);
+    return (<div> <MilkDown  /> </div>);
 }
 
 export default PostsNew

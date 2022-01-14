@@ -12,6 +12,15 @@ a {
   text-decoration: none;
 }
 
+input{
+  outline-style: none ;
+  border: 0;
+}
+
 * {
   box-sizing: border-box;
+}
+.milkdown {
+  height: 500px;
+  overflow-y: scroll;
 }

@@ -28,7 +28,7 @@ export const useToast = (delay: number) => {
                     -webkit-box-shadow: 2px 5px 10px -6px rgba(0,0,0,0.75);
                     -moz-box-shadow: 2px 5px 10px -6px rgba(0,0,0,0.75);
                     box-shadow: 2px 5px 10px -6px rgba(0,0,0,0.75); 
-                   position: absolute;
+                    position: absolute;
                     z-index: 9;
                     top: 0;
                     left: 50%;
