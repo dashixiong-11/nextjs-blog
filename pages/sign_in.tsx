@@ -14,11 +14,11 @@ const SignIn: NextPage<{ user: User }> = (props) => {
         initFormData: {username: '', password: ''},
         fields: [{label: '用户名', type: 'text', key: 'username'},
             {label: '密码', type: 'password', key: 'password'}],
-        buttons: <button type="submit">提交</button>,
+        buttons: <button style={{border:"none",background:"none"}} className='sign-button' type="submit">登录</button>,
         submit: {
             request: formData => axios.post('/api/v1/sessions', formData),
             successCallback: () => {
-                info('登录成功!',()=>{
+                info('登录成功!', () => {
                     const query = qs.parse(window.location.search.substring(1))
                     window.location.href = '/posts'
                 })
@@ -27,11 +27,19 @@ const SignIn: NextPage<{ user: User }> = (props) => {
     })
 
     return <>
-        <h1 className='z'>登录</h1>
-        {/*当前登录用户：{props.user.username}*/}
-        {form}
-        <p className='link'><Link href="/sign_up"><a>去注册</a></Link></p>
-        {view}
+        <div className='sign-in'>
+            {form}
+            {view}
+        </div>
+        <style jsx>
+            {`
+            .sign-in {
+              display: flex;
+              justify-content: center;
+              padding-top: 20%;
+            }
+`}
+        </style>
     </>
 }
 

@@ -32,54 +32,67 @@ const PostsIndex: NextPage<Props> = (props) => {
             window.alert('删除失败')
         })
     }
+    const formatTime = (date: string) => {
+        return date.replace(/T/, ' ').replace(/\..+/, '')
+    }
     return <>
         <div className='posts'>
             <div className='nav'>
-                {
-                    user.username ?
-                        <Link href='/posts/new' as={`/posts/new`}>
-                            <a> 写博客 </a>
-                        </Link> :
-                        <Link href='/sign_in' as={`/sign_in`}>
-                            <a> 登录 </a>
-                        </Link>
-                }
+{/*
+                {user.username &&
+                <Link href='/posts/new' as={`/posts/new`}>
+                    <a> 写博客 </a>
+                </Link>}
+*/}
             </div>
             <ul> {posts.map(p => <li key={p.id}>
                 <Link href='/posts/[id]' as={`/posts/${p.id}`}>
-                    <a> {p.title} </a>
+                    <div>
+                        <a> {p.title} </a>
+                        <span> {formatTime(p.updatedAt.toString())} </span>
+                    </div>
                 </Link>
-                <a onClick={() => deleteBlog(p.id)}>删除</a>
+
+                {/*<a onClick={() => deleteBlog(p.id)}>删除</a>*/}
             </li>)} </ul>
-                {pager}
+            {pager}
         </div>
         <style jsx>
             {`
               .posts {
                 min-height: 100vh;
-                background: #f4f5f5;
-                padding: 20px 10%;
               }
               .posts > .nav {
-                text-align: end;
+                background: url('../loading.jpg') no-repeat center center/cover;
+                padding: 80px 0;
               }
               ul{
-                padding: 0;
+                padding: 20px 10%;
                 margin: 1em 0 0; 
                 display: flex;
                 flex-direction: column;
                 
               }
-               ul > a{
-                  border-bottom: 1px solid #999;
-                  margin-top: 1em;
-                  cursor: pointer;
-                }
                 ul > li {
                   display: flex;
                   align-items: center;
                   justify-content: space-between;
-                  padding: 0.5em 0;
+                  padding: 10px 2em;
+                  margin-top: 1em;
+                  cursor: pointer;
+                }
+                ul > li > div  {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  width: 100%;
+                }
+                ul > li > div > a {
+                  font-weight: bold;
+                }
+                ul > li > div > span {
+                  font-size: 12px;
+                  color: #999;
                 }
               .banner-wrapper{
                 width: 100%;
@@ -120,6 +133,7 @@ export const getServerSideProps: GetServerSideProps = theSession(async (context:
         take: perPage,
         order: {id: 'ASC'}
     });
+    console.log(posts);
     return {
         props: {
             user: JSON.parse(JSON.stringify(user || '')),

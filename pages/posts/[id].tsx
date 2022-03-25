@@ -5,6 +5,9 @@ import {getDatabaseConnection} from '../../lib/getDatabaseConnection';
 import {GetServerSideProps, NextPage} from "next";
 import Link from "next/link";
 import axios, {AxiosResponse} from "axios";
+import dynamic from "next/dynamic";
+
+const MilkDown = dynamic(() => import('../../components/MilkDown/MilkDown'), {ssr: false})
 
 type Props = {
     post: Post,
@@ -30,7 +33,7 @@ const BlogContent: NextPage<Props> = (props) => {
         })
     }
     return <>
-        <div>文章详情</div>
+        {/*
         <div className='wrapper'>
             <h1>{post.title}</h1>
             <Link href="/posts/[id]/edit" as={`/posts/${post.id}/edit`}><a>编辑</a></Link>
@@ -39,6 +42,9 @@ const BlogContent: NextPage<Props> = (props) => {
             <article dangerouslySetInnerHTML={{__html: post.content}}>
             </article>
         </div>
+*/}
+        <MilkDown defaultContent={post.content} defaultTitle={post.title} readOnly/>
+{/*
         <div className="post-comments">
             <h2>评论</h2>
             <div className="post-comments-content">
@@ -49,11 +55,12 @@ const BlogContent: NextPage<Props> = (props) => {
             </div>
         </div>
         <div className='comments-post'>
-            <textarea onChange={onAreaChange}></textarea>
+            <textarea onChange={onAreaChange} />
             <div style={{padding: '0 2em'}}>
                 <button onClick={onSubmit}>发送</button>
             </div>
         </div>
+*/}
         <style jsx>{`
           .wrapper {
             display: flex;
