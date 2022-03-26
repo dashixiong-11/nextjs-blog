@@ -6,9 +6,8 @@ import theSession from "../lib/TheSession";
 import {useForm} from "../hooks/useForm";
 import {useToast} from "../hooks/useToast";
 import qs from 'querystring'
-import Link from "next/link";
 
-const SignIn: NextPage<{ user: User }> = (props) => {
+const SignIn: NextPage<{ user: User }> = () => {
     const {view, info} = useToast(1500)
     const {form} = useForm({
         initFormData: {username: '', password: ''},

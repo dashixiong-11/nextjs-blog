@@ -5,16 +5,17 @@ export const useToast = (delay: number) => {
     const [text, setText] = useState('')
     const time = useRef(null)
 
-    const info = (text: string, callback: Function) => {
+    const info = (text: string, callback?: Function) => {
         if (visible) return
         setText(text)
         setVisible(true)
         time.current = setTimeout(() => {
-            callback()
+            if (callback) {
+                callback()
+            }
             setVisible(false)
             clearTimeout(time.current)
         }, delay)
-
     }
     const view = visible ? <>
         <div className='toast'>

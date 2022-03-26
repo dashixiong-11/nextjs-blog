@@ -8,8 +8,6 @@ import {usePager} from '../../hooks/usePager';
 import React, {useEffect} from "react";
 import theSession from "../../lib/TheSession";
 import {User} from "../../src/entity/User";
-import axios from "axios";
-import {useRouter} from 'next/router';
 
 
 type Props = {
@@ -21,35 +19,34 @@ type Props = {
     user: User
 }
 const PostsIndex: NextPage<Props> = (props) => {
-    const router = useRouter()
     const {posts, page, totalPage, user} = props;
     const {pager} = usePager({page, totalPage});
-    const deleteBlog = (id: number) => {
-        axios.delete(`/api/v1/posts/${id}`).then(() => {
-            window.alert('删除成功')
-            router.push('/posts')
-        }, () => {
-            window.alert('删除失败')
-        })
-    }
-    const formatTime = (date: string) => {
-        return date.replace(/T/, ' ').replace(/\..+/, '')
+    const formatTime = (date: Date) => {
+        // return date
+        return new Date(+new Date(date) + 16 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        // return new Date('2022-03-26T02:34:54.096Z')
     }
     return <>
         <div className='posts'>
             <div className='nav'>
-{/*
+                {/*
                 {user.username &&
                 <Link href='/posts/new' as={`/posts/new`}>
                     <a> 写博客 </a>
                 </Link>}
 */}
             </div>
+            <div className='add-blog'>
+                {user.username &&
+                <Link href='/posts/new' as={`/posts/new`}>
+                    <a> New </a>
+                </Link>}
+            </div>
             <ul> {posts.map(p => <li key={p.id}>
                 <Link href='/posts/[id]' as={`/posts/${p.id}`}>
                     <div>
                         <a> {p.title} </a>
-                        <span> {formatTime(p.updatedAt.toString())} </span>
+                        <span> {formatTime(p.updatedAt)} </span>
                     </div>
                 </Link>
 
@@ -61,6 +58,10 @@ const PostsIndex: NextPage<Props> = (props) => {
             {`
               .posts {
                 min-height: 100vh;
+              }
+              .posts > .add-blog {
+                padding: 1em 2em;
+                text-align: end;
               }
               .posts > .nav {
                 background: url('../loading.jpg') no-repeat center center/cover;
@@ -127,13 +128,12 @@ export const getServerSideProps: GetServerSideProps = theSession(async (context:
     const query = qs.parse(search);
     const page = parseInt(query.page?.toString()) || 1;
     const connection = await getDatabaseConnection();// 第一次链接能不能用 get
-    const perPage = 2;
+    const perPage = 10;
     const [posts, count] = await connection.manager.findAndCount(Post, {
         skip: (page - 1) * perPage,
         take: perPage,
         order: {id: 'ASC'}
     });
-    console.log(posts);
     return {
         props: {
             user: JSON.parse(JSON.stringify(user || '')),

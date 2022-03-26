@@ -7,8 +7,8 @@ import {Comment} from "./entity/Comment";
 createConnection().then(async connection => {
     const {manager} = connection
     const u1 = new User()
-    u1.username = 'changeWhen'
-    u1.passwordDigest = 'qq123123'
+    u1.username = 'dsx111'
+    u1.passwordDigest = 'qq111111'
     await manager.save(u1)
     // 创建 post 1
     const p1 = new Post();

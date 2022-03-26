@@ -2,32 +2,49 @@ import React, {useState} from "react";
 import {Post} from '../../src/entity/Post';
 import {Comment} from '../../src/entity/Comment';
 import {getDatabaseConnection} from '../../lib/getDatabaseConnection';
-import {GetServerSideProps, NextPage} from "next";
-import Link from "next/link";
+import {GetServerSideProps, GetServerSidePropsContext, NextPage} from "next";
 import axios, {AxiosResponse} from "axios";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import {useRouter} from "next/router";
+import theSession from "../../lib/TheSession";
+import {User} from "../../src/entity/User";
+import {useToast} from "../../hooks/useToast";
 
 const MilkDown = dynamic(() => import('../../components/MilkDown/MilkDown'), {ssr: false})
 
 type Props = {
     post: Post,
+    user: User,
     comments: Comment[]
 }
 const BlogContent: NextPage<Props> = (props) => {
-    const {post, comments} = props
+    const {view, info} = useToast(1500)
+    const router = useRouter()
+    const {post, user, comments} = props
     const [commentContent, setCommentContent] = useState('')
     const onAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setCommentContent(e.currentTarget.value)
     }
+
+    const deleteBlog = (id: number) => {
+        axios.delete(`/api/v1/posts/${id}`).then(() => {
+            info('删除成功', async () => {
+                await router.replace('/posts')
+            })
+        }, () => {
+            info('删除失败')
+        })
+    }
     const onSubmit = async () => {
         await axios.post('/api/v1/comments', {postId: post.id, content: commentContent}).then(() => {
-            window.alert('评论成功')
-            window.location.reload()
+
+            info('评论成功')
         }, error => {
             if (error.response) {
                 const response: AxiosResponse = error.response
                 if (response.status === 401) {
-                    window.alert('请先登录')
+                    info('请先登录')
                 }
             }
         })
@@ -43,8 +60,14 @@ const BlogContent: NextPage<Props> = (props) => {
             </article>
         </div>
 */}
+        {user.id === post.authorId && <div className='edit'>
+            <span onClick={() => deleteBlog(post.id)}>Delete</span>
+            <Link href="/posts/[id]/edit" as={`/posts/${post.id}/edit`}><a>Edit</a></Link>
+        </div>
+        }
         <MilkDown defaultContent={post.content} defaultTitle={post.title} readOnly/>
-{/*
+        {view}
+        {/*
         <div className="post-comments">
             <h2>评论</h2>
             <div className="post-comments-content">
@@ -67,6 +90,14 @@ const BlogContent: NextPage<Props> = (props) => {
             align-items: center;
             justify-content: space-between;
             padding: 10px 20px;
+          }
+          .edit {
+            text-align: end;
+            padding: 0.5em 1em;
+            cursor: pointer;
+          }
+          .edit > span {
+            padding: 0 1em;
           }
           .post-comments {
             margin-top: 2em;
@@ -102,14 +133,18 @@ const BlogContent: NextPage<Props> = (props) => {
 
 export default BlogContent
 
-export const getServerSideProps: GetServerSideProps<any, { id: string }> = async (context) => {
+export const getServerSideProps: GetServerSideProps<any, { id: string }> = theSession(async (context: GetServerSidePropsContext) => {
+    // @ts-ignore
+    const user = context.req.session.get('currentUser');
     const connection = await getDatabaseConnection();
+    // @ts-ignore
     const post = await connection.manager.findOne(Post, context.params.id);
     const comments = await connection.manager.find(Comment, {where: {post: post}})
     return {
         props: {
-            post: JSON.parse(JSON.stringify(post)),
+            user: user,
+            post: JSON.parse(JSON.stringify(post || {})),
             comments: JSON.parse(JSON.stringify(comments))
         }
     };
-};
+})

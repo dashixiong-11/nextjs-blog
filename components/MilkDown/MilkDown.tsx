@@ -6,17 +6,20 @@ import {commonmark} from "@milkdown/preset-commonmark";
 import {slash} from '@milkdown/plugin-slash';
 import {history} from "@milkdown/plugin-history";
 import axios, {AxiosResponse} from "axios";
+import {useToast} from "../../hooks/useToast";
+import {useRouter} from "next/router";
 
 type Props = {
-    id?: string,
+    id?: string | number,
     defaultContent?: string,
     readOnly?: Boolean,
     defaultTitle?: string
 }
 export const MilkDown: FunctionComponent<Props> = ({id, defaultContent, defaultTitle, readOnly}) => {
+    const router = useRouter()
+    const {view, info} = useToast(1500)
     const [title, setTitle] = useState(defaultTitle)
     const ref = useRef<any>({})
-
     const editor = useEditor((root) =>
         Editor.make()
             .config((ctx) => {
@@ -39,23 +42,24 @@ export const MilkDown: FunctionComponent<Props> = ({id, defaultContent, defaultT
     const release = async () => {
         const content = getMarkdown()
         if (title.trim() === '') {
-            window.alert('标题不能为空')
+            info('标题不能为空')
             return
         }
-        await axios.post('/api/v1/posts', {
+        await axios[id ? 'patch' : 'post'](id ? '/api/v1/posts/' + id : '/api/v1/posts', {
             title: title,
             content: content,
             id: id
         }).then(() => {
-            window.alert('发布成功')
-            // window.location.href = '/posts'
+            info('发布成功', () => {
+                router.replace('/posts')
+            })
         }, error => {
             if (error.response) {
                 const response: AxiosResponse = error.response;
                 if (response.status === 422) {
                     console.log(response);
                 } else if (response.status === 401) {
-                    window.alert('请先登录')
+                    info('请先登录')
                 }
             }
         })
@@ -72,7 +76,8 @@ export const MilkDown: FunctionComponent<Props> = ({id, defaultContent, defaultT
                 <button className='submit' onClick={release}>发布</button>
             </div>
         }
-        <ReactEditor  ref={ref} editor={editor}/>
+        <ReactEditor ref={ref} editor={editor}/>
+        {view}
         <style jsx>{`
                 .editor-view {
                   display: flex;
@@ -98,13 +103,11 @@ export const MilkDown: FunctionComponent<Props> = ({id, defaultContent, defaultT
                 
                 }
                 .title > input {
-                  border:1px solid #198;
+                  border:1px solid #eaeaea;
                   flex-grow: 1;
-                  color: #fff;
                   padding: 10px 18px;
                   border-radius: 6px;
                   margin-right: 2em;
-                  background: #2f343f;
                 }
             `}</style>
 
