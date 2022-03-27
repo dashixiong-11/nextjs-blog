@@ -6,7 +6,6 @@ import {Post} from "../../../src/entity/Post";
 const Posts = theSession(async (req:NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const {title, content} = req.body;
-        // @ts-ignore
         const user = req.session.get('currentUser');
         if (!user) {
             res.statusCode = 401

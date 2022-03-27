@@ -9,7 +9,6 @@ const Posts: NextApiHandler = theSession(async (req, res) => {
         const post = await connection.manager.findOne<Post>('Post', id)
         post.title = title
         post.content = content
-        //@ts-ignore
         const user = req.session.get('currentUser')
         if (!user) {
             res.statusCode = 401

@@ -67,7 +67,6 @@ export const MilkDown: FunctionComponent<Props> = ({id, defaultContent, defaultT
     const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
     }
-    // @ts-ignore
     return <div className='editor-view'>
         {readOnly ?
             <h1>{title}</h1> :
