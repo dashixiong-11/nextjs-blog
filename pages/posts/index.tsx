@@ -49,7 +49,6 @@ const PostsIndex: NextPage<Props> = (props) => {
                         <span> {formatTime(p.updatedAt)} </span>
                     </div>
                 </Link>
-
                 {/*<a onClick={() => deleteBlog(p.id)}>删除</a>*/}
             </li>)} </ul>
             {pager}

@@ -48,7 +48,9 @@ git push
 ssh blog@dev1 'bash -s' < bin/deploy.sh
 ```
 
-##　备忘
+## 备忘
+
+初次运行 yarn m:run ，请先注释掉getDatabaseConnection相关内容,然后运行 yarn dev 更行dist 文件 ，最后运行yarn m:run
 
 ```bash 
 docker run --name nginx1 --network=host -v /home/blog/nginx.conf:/etc/nginx/conf.d/default.conf -v /home/

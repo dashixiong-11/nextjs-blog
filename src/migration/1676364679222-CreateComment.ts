@@ -1,6 +1,6 @@
-import {MigrationInterface, QueryRunner,Table} from "typeorm";
+import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class CreateComments1633611282352 implements MigrationInterface {
+export class CreateComment1676364679222 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         return await queryRunner.createTable(new Table({
@@ -20,6 +20,5 @@ export class CreateComments1633611282352 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         return await queryRunner.dropTable('comments')
     }
-
 
 }
