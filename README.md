@@ -50,7 +50,12 @@ ssh blog@dev1 'bash -s' < bin/deploy.sh
 
 ## 备忘
 
-初次运行 yarn m:run ，请先注释掉getDatabaseConnection相关内容,然后运行 yarn dev 更行dist 文件 ，最后运行yarn m:run
+初次运行 yarn m:run ，请先注释掉getDatabaseConnection相关内容,
+删除 dist文件
+然后运行 yarn dev 更新 dist 文件 ，最后运行yarn m:run
+
+migration 文件中 如果修改表的文件在创建表的文件前面就会报错
+
 
 ```bash 
 docker run --name nginx1 --network=host -v /home/blog/nginx.conf:/etc/nginx/conf.d/default.conf -v /home/

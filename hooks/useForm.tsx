@@ -1,105 +1,190 @@
-import React, {ReactChild, useCallback, useState} from "react";
-import {AxiosResponse} from "axios";
+import React, {MouseEvent, MouseEventHandler, ReactChild, useCallback, useEffect, useState} from "react";
+import axios, {AxiosError, AxiosResponse} from "axios";
+import {useToast} from "./useToast";
 
-
-type Field<T> = {
+type Field = {
     label: string,
-    type: 'text' | 'password' | 'textarea',
-    key: keyof T
+    type: keyof FormDataType,
+    key: keyof FormDataType,
+    placeholder: string
 }
-type useFormOptions<T> = {
-    initFormData: T;
-    fields: Field<T>[];
-    buttons: ReactChild;
-    submit: {
-        request: (formData: T) => Promise<AxiosResponse<T>>;
-        successCallback: () => void;
-    }
+type Fields = Field[]
+type useType = 'sign' | 'register'
+type FormDataType = {
+    username: string,
+    password: string,
+    passwordConfirmation: string
 }
 
-export function useForm<T>(options: useFormOptions<T>) {
-    const {initFormData, fields, buttons, submit} = options;
-    const [formData, setFormData] = useState(initFormData)
-    const [errors, setErrors] = useState(() => {
-        const e: { [key in keyof T]?: string[] } = {}
-        for (let key in initFormData) {
-            if (initFormData.hasOwnProperty(key)) {
-                e[key] = []
-            }
-        }
-        return e
+export function useForm() {
+
+    const {view, info} = useToast(1500)
+    const [type, setType] = useState<useType>('sign')
+    const [formData, setFormData] = useState<FormDataType>({username: '', password: '', passwordConfirmation: ''})
+    const [fields, setFields] = useState<Fields>([
+            {label: '用户名', type: 'username', key: 'username', placeholder: '请输入用户名'},
+            {label: '密码', type: 'password', key: 'password', placeholder: '请输入密码'},
+            {label: '确认密码', type: 'password', key: 'passwordConfirmation', placeholder: '请确认密码'}
+        ]
+    )
+    /*
+        const [errors, setErrors] = useState(() => {
+             const err: { [key in keyof FormDataType]?:string[] } = {}
+             for (let key in formData) {
+                  if (formData.hasOwnProperty(key)) {
+                      e[key] = []
+                  }
+             }
+             return err
+        })
+    */
+    const [errors, setErrors] = useState<{ [key in keyof FormDataType]: string[] }>({
+        username: [],
+        password: [],
+        passwordConfirmation: [],
     })
-    const onChange = useCallback((key: keyof T, value: any) => {
+    const onChange = useCallback((key: keyof FormDataType, value: any) => {
         setFormData({...formData, [key]: value})
     }, [formData])
-    const _onSubmit = useCallback((e) => {
-        e.preventDefault();
-        submit.request(formData).then(() => {
-                submit.successCallback()
-            }, (error) => {
-                if (error.response) {
-                    const response: AxiosResponse = error.response;
-                    if (response.status === 422) {
-                        setErrors(response.data);
-                    } else if (response.status === 401) {
-                        window.alert('请先登录')
-                        window.location.href = '/sign_in?return_to=' + encodeURIComponent(window.location.pathname)
-                    }
-                }
-            }
-        );
 
-    }, [submit, formData]);
+    useEffect(()=>{
+        setFormData({username:'',password:'',passwordConfirmation:''})
+        setErrors({
+            username: [],
+            password: [],
+            passwordConfirmation: [],
+        })
+    },[type])
+
+    const errorHandle = (error: any) => {
+        if (error.response) {
+            const response: AxiosResponse = error.response;
+            if (response.status === 422) {
+                setErrors(response.data);
+            } else if (response.status === 401) {
+
+                info('请先登录', () => {
+                    window.location.href = '/sign_in?return_to=' + encodeURIComponent(window.location.pathname)
+                })
+            }
+        }
+    }
+    const onSign = (e: MouseEvent) => {
+        e.preventDefault();
+        axios.post('/api/v1/sessions', formData).then(() => {
+            window.location.href = '/posts'
+        }, error => errorHandle(error))
+    }
+    const onToRegister = (e: MouseEvent) => {
+        e.preventDefault();
+        setType('register')
+    }
+    const onToSign = (e: MouseEvent) => {
+        e.preventDefault();
+        setType('sign')
+    }
+    const onRegister = (e: MouseEvent) => {
+        e.preventDefault();
+        axios.post('/api/v1/users', formData).then(() => {
+            info('注册成功', () => setType('sign'))
+        }, error => errorHandle(error))
+    }
 
     const form = <>
-        <form onSubmit={_onSubmit}>
+        {view}
+        <form>
+            {type === 'sign' ? <h1>登录</h1> : <h1>注册</h1>}
             {fields.map(field =>
-                <div key={field.key.toString()}>
+                (type === 'sign' && field.key === 'passwordConfirmation') ? null : <div key={field.key.toString()}>
                     <label>
                         <div className='title'>
                             {field.label}
                         </div>
-                        {field.type === 'textarea' ?
-                            <textarea onChange={(e) => onChange(field.key, e.target.value)}
-                                      value={formData[field.key].toString()}/>
-                            :
-                            <input type={field.type}  value={formData[field.key].toString()}
-                                   onChange={(e) => onChange(field.key, e.target.value)}/>
-                        }
+                        <input placeholder={field.placeholder} type={field.type} value={formData[field.key].toString()}
+                               onChange={(e) => onChange(field.key, e.target.value)}/>
                     </label>
-                    {errors[field.key]?.length > 0 && <div>
-                        {errors[field.key].join(',')}
+                    {<div className='error-view'>
+                        {errors[field.key]?.join(',')}
                     </div>}
                 </div>
             )}
             <div className='buttons'>
-                {buttons}
+                {type === 'sign' ?
+                    <>
+                        <button className='main-button' onClick={onSign}>登录</button>
+                        <button className='minor-button' onClick={onToRegister}>去注册</button>
+                    </> : <>
+                        <button className='main-button' onClick={onRegister}>注册</button>
+                        <button className='minor-button' onClick={onToSign}>去登录</button>
+                    </>
+                }
             </div>
         </form>
         <style jsx>
             {`
-            form > div {
-              margin-top: 2em;
-            }
-            
-            form > div > label  {
-              display: flex;
-            }
-            
-            form > div > label > input {
-              padding: 3px 8px;
-              border-bottom: 1px solid #999;
-              margin-left: 0.5em;
-            }
-            form > div > label > .title {
-              width: 3em;
-              
-            }
-            form > div:last-child   {
-              display: flex;
-              justify-content: center;
-            }
-              `}
+              form {
+                padding: 20% 20%;
+              }
+
+              form h1 {
+                padding-bottom: 5px;
+              }
+
+              form > div {
+                padding-bottom: 1.5em;
+              }
+
+              form > div > label {
+                display: flex;
+                color: #999;
+                border: 1px solid #d3d3d3;
+                border-radius: 10px;
+                padding: 6px 15px;
+                display: flex;
+                flex-direction: column;
+              }
+
+              form > div > label > input {
+                padding: 5px 0;
+                background: none;
+                color: #333;
+              }
+
+              input::placeholder {
+                font-size: 11px;
+                color: #b7b7b7;
+              }
+
+              form .error-view {
+                font-size: 12px;
+                color: red;
+                padding: 5px 15px;
+                min-height: 1.5em;
+              }
+
+              form .buttons {
+                display: flex;
+                flex-direction: column;
+                margin-top: 80px;
+              }
+
+              form .buttons button {
+                background: none;
+                border: none;
+                color: #647479;
+              }
+
+              form .buttons .main-button {
+                background: #333;
+                color: #fff;
+                padding: 8px 0;
+                border-radius: 8px;
+              }
+
+              form .buttons .minor-button {
+                margin-top: 2.5em;
+              }
+            `}
         </style>
     </>
     return {

@@ -1,5 +1,4 @@
 import {GetServerSideProps, GetServerSidePropsContext, NextPage} from 'next';
-import {UAParser} from 'ua-parser-js';
 import {getDatabaseConnection} from 'lib/getDatabaseConnection';
 import {Post} from 'src/entity/Post';
 import Link from 'next/link';
@@ -8,6 +7,7 @@ import {usePager} from '../../hooks/usePager';
 import React, {useEffect} from "react";
 import theSession from "../../lib/TheSession";
 import {User} from "../../src/entity/User";
+import {HeadCover} from "../../components/HeadCover";
 
 
 type Props = {
@@ -28,19 +28,12 @@ const PostsIndex: NextPage<Props> = (props) => {
     }
     return <>
         <div className='posts'>
-            <div className='nav'>
-                {/*
-                {user.username &&
-                <Link href='/posts/new' as={`/posts/new`}>
-                    <a> 写博客 </a>
-                </Link>}
-*/}
-            </div>
+            <HeadCover username={props.user && props.user.username}/>
             <div className='add-blog'>
                 {user.username &&
-                <Link href='/posts/new' as={`/posts/new`}>
-                    <a> New </a>
-                </Link>}
+                    <Link href='/posts/new' as={`/posts/new`}>
+                        <a> New </a>
+                    </Link>}
             </div>
             <ul> {posts.map(p => <li key={p.id}>
                 <Link href='/posts/[id]' as={`/posts/${p.id}`}>
@@ -58,64 +51,73 @@ const PostsIndex: NextPage<Props> = (props) => {
               .posts {
                 min-height: 100vh;
               }
+
               .posts > .add-blog {
                 padding: 1em 2em;
                 text-align: end;
               }
+
               .posts > .nav {
                 background: url('../loading.jpg') no-repeat center center/cover;
                 padding: 80px 0;
               }
-              ul{
+
+              ul {
                 padding: 20px 10%;
-                margin: 1em 0 0; 
+                margin: 1em 0 0;
                 display: flex;
                 flex-direction: column;
-                
+
               }
-                ul > li {
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-between;
-                  padding: 10px 2em;
-                  margin-top: 1em;
-                  cursor: pointer;
-                }
-                ul > li > div  {
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-between;
-                  width: 100%;
-                }
-                ul > li > div > a {
-                  font-weight: bold;
-                }
-                ul > li > div > span {
-                  font-size: 12px;
-                  color: #999;
-                }
-              .banner-wrapper{
+
+              ul > li {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 2em;
+                margin-top: 1em;
+                cursor: pointer;
+              }
+
+              ul > li > div {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+              }
+
+              ul > li > div > a {
+                font-weight: bold;
+              }
+
+              ul > li > div > span {
+                font-size: 12px;
+                color: #999;
+              }
+
+              .banner-wrapper {
                 width: 100%;
                 height: 240px;
                 display: flex;
                 justify-content: center;
-                align-items: center; 
+                align-items: center;
                 overflow: hidden;
               }
+
               .blog-name {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 70px;
-              color: #fff;
-              height: 300px;
-              position: relative;
-              cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 70px;
+                color: #fff;
+                height: 300px;
+                position: relative;
+                cursor: pointer;
               }
-`}
+            `}
 
         </style>
-    </>
+    </>;
 };
 export default PostsIndex;
 

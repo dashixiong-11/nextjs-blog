@@ -16,6 +16,11 @@ const Home: NextPage<{ user: User }> = (props) => {
         setLoad(speed.current)
         if (speed.current > 99) {
             clearInterval(id.current)
+            if(props && props.user){
+                window.location.href = '/posts'
+            }else {
+                window.location.href = '/sign_in'
+            }
         }
     }
     useEffect(() => {
@@ -24,14 +29,9 @@ const Home: NextPage<{ user: User }> = (props) => {
     return (
         <>
             <div className='home'>
-                {load === 100 ? <span> <Link href="/posts"><a>查看博客</a></Link> </span> : <span>{load}%</span>}
+                 <span>{load}%</span>
                 <div className='cover bg'
                      style={{filter: `blur(${scale(load, 0, 100, 30, 0)}px)`}}>
-                    {/*
-                    <div className='logo'>这是一个logo</div>
-                    <div>我的博客</div>
-                    <p className='link'></p>
-*/}
                 </div>
             </div>
             <style jsx>{`
