@@ -5,13 +5,15 @@ export const HeadCover: React.FC<{username:string}> = props => {
     return <>
         <div className='nav'>
             {/*<div className='head-cover' />*/}
-            <img src="./vercel.svg" alt="" className="logo"/>
+            <img src='/vercel.svg' alt="" className="logo"/>
             <div className='nav-container'>
                 {
                     props.username?
                         <div className='nav-username'>
                             <span>{props.username}</span>
-                            <button>注销</button>
+                            <Link href='/posts/new' as={`/posts/new`}>
+                                <button>写博客</button>
+                            </Link>
                         </div>
                         :
                     <Link href='/sign_in' as={`/sign_in`}>

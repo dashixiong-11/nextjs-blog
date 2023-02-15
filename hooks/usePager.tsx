@@ -40,7 +40,7 @@ export const usePager = (options: Options) => {
             margin-top: 1em;
             display: flex;
             justify-content: center;
-            position: fixed;
+            position: absolute;
             width: 100%;
             left: 50%;
             bottom: 10px;

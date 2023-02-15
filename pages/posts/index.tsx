@@ -8,6 +8,8 @@ import React, {useEffect} from "react";
 import theSession from "../../lib/TheSession";
 import {User} from "../../src/entity/User";
 import {HeadCover} from "../../components/HeadCover";
+import {SideCover} from "../../components/SideCover";
+import {Layout} from "../../components/Layout";
 
 
 type Props = {
@@ -29,27 +31,45 @@ const PostsIndex: NextPage<Props> = (props) => {
     return <>
         <div className='posts'>
             <HeadCover username={props.user && props.user.username}/>
-            <div className='add-blog'>
-                {user.username &&
-                    <Link href='/posts/new' as={`/posts/new`}>
-                        <a> New </a>
-                    </Link>}
-            </div>
-            <ul> {posts.map(p => <li key={p.id}>
-                <Link href='/posts/[id]' as={`/posts/${p.id}`}>
-                    <div>
-                        <a> {p.title} </a>
-                        <span> {formatTime(p.updatedAt)} </span>
-                    </div>
-                </Link>
-                {/*<a onClick={() => deleteBlog(p.id)}>删除</a>*/}
-            </li>)} </ul>
-            {pager}
+            <Layout>
+                <div className='wrapper'>
+                    {
+                        (posts && posts.length >0) ?
+                            <ul> {posts.map(p => <li key={p.id}>
+                                <Link href='/posts/[id]' as={`/posts/${p.id}`}>
+                                    <a>
+                                        <div className="title">
+                                            {p.title}
+                                        </div>
+                                        <span> {formatTime(p.updatedAt)} </span>
+                                    </a>
+                                </Link>
+                                {/*<a onClick={() => deleteBlog(p.id)}>删除</a>*/}
+                            </li>)} </ul>: <div className="empty">
+                                <span>你还没有发表过任何博客</span>
+                                {/*{props.user && props.user.username ?*/}
+                                {/*    <button>*/}
+                                {/*        <Link href='/posts/new' as={`/posts/new`}>*/}
+                                {/*                <a> 写博客 </a>*/}
+                                {/*        </Link>*/}
+                                {/*    </button>: <button>*/}
+                                {/*        <Link href='/sign_in' as={`/sign_in`}>*/}
+                                {/*            <a> 登录 </a>*/}
+                                {/*        </Link>*/}
+                                {/*    </button>*/}
+                                {/*}*/}
+                            </div>
+                    }
+                    {pager}
+                </div>
+            </Layout>
         </div>
         <style jsx>
             {`
               .posts {
                 min-height: 100vh;
+                display: flex;
+                flex-direction: column;
               }
 
               .posts > .add-blog {
@@ -57,40 +77,47 @@ const PostsIndex: NextPage<Props> = (props) => {
                 text-align: end;
               }
 
-              .posts > .nav {
-                background: url('../loading.jpg') no-repeat center center/cover;
-                padding: 80px 0;
-              }
-
               ul {
-                padding: 20px 10%;
-                margin: 1em 0 0;
                 display: flex;
                 flex-direction: column;
-
+                overflow: scroll;
+                width: 100%;
+                padding: 20px;
+              }
+              .right-side .empty {
+                color: #999;
+              }
+               .right-side .empty button {
+                  border: none;
+                  line-height: 36px;
+                  color: #fff;
+                  padding: 0 1.5em;
+                  border-radius: 18px;
+                  background: #333;
               }
 
               ul > li {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: 10px 2em;
-                margin-top: 1em;
                 cursor: pointer;
               }
 
-              ul > li > div {
+              ul > li >  a {
                 display: flex;
-                align-items: center;
                 justify-content: space-between;
+                align-items: center;
+                font-weight: bold;
                 width: 100%;
               }
-
-              ul > li > div > a {
-                font-weight: bold;
+              ul > li > a > .title{
+                  width: 10em;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
               }
 
-              ul > li > div > span {
+              ul > li > a > span {
                 font-size: 12px;
                 color: #999;
               }

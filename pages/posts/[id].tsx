@@ -10,6 +10,9 @@ import {useRouter} from "next/router";
 import theSession from "../../lib/TheSession";
 import {User} from "../../src/entity/User";
 import {useToast} from "../../hooks/useToast";
+import {HeadCover} from "../../components/HeadCover";
+import {SideCover} from "../../components/SideCover";
+import {Layout} from "../../components/Layout";
 
 const MilkDown = dynamic(() => import('../../components/MilkDown/MilkDown'), {ssr: false})
 
@@ -49,7 +52,18 @@ const BlogContent: NextPage<Props> = (props) => {
             }
         })
     }
-    return <>
+    return <div className='post'>
+        <HeadCover username={props.user && props.user.username} />
+            <Layout>
+                <div>
+                    {user.id === post.authorId && <div className='actions'>
+                        <span className='delete' onClick={() => deleteBlog(post.id)}>删除</span>
+                        <Link href="/posts/[id]/edit" as={`/posts/${post.id}/edit`}><a className='edit'>编辑</a></Link>
+                    </div>
+                    }
+                    <MilkDown defaultContent={post.content} defaultTitle={post.title} readOnly/>
+                </div>
+            </Layout>
         {/*
         <div className='wrapper'>
             <h1>{post.title}</h1>
@@ -60,13 +74,6 @@ const BlogContent: NextPage<Props> = (props) => {
             </article>
         </div>
 */}
-        {user.id === post.authorId && <div className='edit'>
-            <span onClick={() => deleteBlog(post.id)}>Delete</span>
-            <Link href="/posts/[id]/edit" as={`/posts/${post.id}/edit`}><a>Edit</a></Link>
-        </div>
-        }
-        <MilkDown defaultContent={post.content} defaultTitle={post.title} readOnly/>
-        {view}
         {/*
         <div className="post-comments">
             <h2>评论</h2>
@@ -85,50 +92,23 @@ const BlogContent: NextPage<Props> = (props) => {
         </div>
 */}
         <style jsx>{`
-          .wrapper {
+          .post {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+          }
+          .actions  {
+            color: #666;
+            font-size: 12px;
+            cursor: default;
+            padding: 1em 3em;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
+            justify-content: end;
           }
-          .edit {
-            text-align: end;
-            padding: 0.5em 1em;
-            cursor: pointer;
-          }
-          .edit > span {
-            padding: 0 1em;
-          }
-          .post-comments {
-            margin-top: 2em;
-          }
-          .post-comments-content {
-            padding: 1em 2em;
-          }
-          .comments-post {
-            padding: 1em 2em;
-            display: flex;
-            align-items: center;
-            position: fixed;
-            bottom: 10px;
-            left: 0;
-            right: 0;
-            
-          }
-          /*
-          .comments-post  button {
-            border: none;
-            
-          }
-          */
-          textarea {
-            height: 5em;
-            padding: 8px;
-            flex-grow: 1;
-            font-size: 16px;
-          }
+          .edit { margin-left: 2em }
 `}</style>
-    </>
+    </div>
 }
 
 export default BlogContent
