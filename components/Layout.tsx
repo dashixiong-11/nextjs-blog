@@ -14,16 +14,18 @@ export const Layout: React.FC = (props:PropsWithChildren<any>) => {
             </div>
         <style jsx>
             {`
-              .layout{
+              .layout {
                 display: flex;
                 flex-grow: 1;
               }
+
               .left-side {
                 width: 40%;
-                border-right:1px solid #333;
+                border-right: 1px solid #cecece;
               }
+
               .right-side {
-              position: relative;
+                position: relative;
                 height: 88vh;
                 width: 60%;
                 overflow: auto;

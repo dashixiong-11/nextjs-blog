@@ -41,7 +41,6 @@ const BlogContent: NextPage<Props> = (props) => {
     }
     const onSubmit = async () => {
         await axios.post('/api/v1/comments', {postId: post.id, content: commentContent}).then(() => {
-
             info('评论成功')
         }, error => {
             if (error.response) {

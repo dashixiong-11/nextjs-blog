@@ -5,7 +5,7 @@ export const HeadCover: React.FC<{username:string}> = props => {
     return <>
         <div className='nav'>
             {/*<div className='head-cover' />*/}
-            <img src='/vercel.svg' alt="" className="logo"/>
+            <img src='/blog.svg' alt="" className="logo"/>
             <div className='nav-container'>
                 {
                     props.username?
@@ -51,7 +51,7 @@ export const HeadCover: React.FC<{username:string}> = props => {
               }
 
               .logo {
-                width: 100px;
+                width: 30px;
               }
 
               .head-cover {

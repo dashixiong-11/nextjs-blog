@@ -91,7 +91,7 @@ export const MilkDown: FunctionComponent<Props> = ({id, defaultContent, defaultT
                   border: none;
                   line-height: 30px;
                   border-radius: 8px;
-                  background: #198;
+                  background: #333;
                   color: #fff;
                   padding: 2px 20px;
                 }

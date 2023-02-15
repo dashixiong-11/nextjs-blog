@@ -22,7 +22,8 @@ input {
 }
 
 .milkdown {
-    min-height: 500px;
+    overflow-y: auto;
+    height: 600px;
     box-shadow: none !important;
 }
 
