@@ -113,12 +113,11 @@ const BlogContent: NextPage<Props> = (props) => {
 export default BlogContent
 
 export const getServerSideProps: GetServerSideProps<any, { id: string }> = theSession(async (context: GetServerSidePropsContext) => {
-    // @ts-ignore
-    const user = context.req.session.get('currentUser');
     const connection = await getDatabaseConnection();
-    // @ts-ignore
-    const post = await connection.manager.findOne(Post, context.params.id);
+    const id = context.params.id
+    const post = await connection.manager.findOne('Post', id);
     const comments = await connection.manager.find(Comment, {where: {post: post}})
+    const user = (context.req as any).session.get('currentUser') || null;
     return {
         props: {
             user: user,

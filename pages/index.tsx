@@ -66,8 +66,7 @@ const Home: NextPage<{ user: User }> = (props) => {
 export default Home
 
 export const getServerSideProps: GetServerSideProps = theSession(async (context: GetServerSidePropsContext) => {
-    // @ts-ignore
-    const user = context.req.session.get('currentUser');
+    const user = (context.req as any).session.get('currentUser');
     return {
         props: {
             user: JSON.parse(JSON.stringify(user || ''))

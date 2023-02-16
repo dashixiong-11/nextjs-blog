@@ -7,6 +7,7 @@ const Posts = theSession(async (req:NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const {title, content} = req.body;
         const user = req.session.get('currentUser');
+        
         if (!user) {
             res.statusCode = 401
             res.end()

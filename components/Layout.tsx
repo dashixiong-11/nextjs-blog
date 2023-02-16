@@ -4,7 +4,6 @@ import {SideCover} from "./SideCover";
 type PropsWithChildren<P> = P & { children?: ReactNode };
 
 export const Layout: React.FC = (props:PropsWithChildren<any>) => {
-    console.log(props);
     return <div className='layout'>
             <div className="left-side">
                 <SideCover />

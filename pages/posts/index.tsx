@@ -8,7 +8,6 @@ import React, {useEffect} from "react";
 import theSession from "../../lib/TheSession";
 import {User} from "../../src/entity/User";
 import {HeadCover} from "../../components/HeadCover";
-import {SideCover} from "../../components/SideCover";
 import {Layout} from "../../components/Layout";
 
 
@@ -149,19 +148,21 @@ const PostsIndex: NextPage<Props> = (props) => {
 export default PostsIndex;
 
 export const getServerSideProps: GetServerSideProps = theSession(async (context: GetServerSidePropsContext) => {
-    // @ts-ignore
-    const user = context.req.session.get('currentUser');
+    const user = (context.req as any).session.get('currentUser');
     const index = context.req.url.indexOf('?');
     const search = context.req.url.substr(index + 1);
     const query = qs.parse(search);
     const page = parseInt(query.page?.toString()) || 1;
     const connection = await getDatabaseConnection();// 第一次链接能不能用 get
+    
     const perPage = 10;
     const [posts, count] = await connection.manager.findAndCount(Post, {
         skip: (page - 1) * perPage,
         take: perPage,
         order: {id: 'ASC'}
     });
+    
+
     return {
         props: {
             user: JSON.parse(JSON.stringify(user || '')),
