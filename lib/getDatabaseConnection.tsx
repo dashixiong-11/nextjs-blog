@@ -7,10 +7,13 @@ import config from 'ormconfig.json';
 
 const create = async () => {
     // @ts-ignore
+    //process.env.NODE_ENV
     return createConnection({
         ...config,
         host: process.env.NODE_ENV === 'production' ? 'localhost' : config.host,
         database: process.env.NODE_ENV === 'production' ? 'blog_production' : 'blog_development',
+        // host:  '192.168.125.3',
+        // database:  'blog_production' ,
         entities: [Post, User, Comment]
     });
 };
