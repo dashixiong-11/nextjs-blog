@@ -14,7 +14,7 @@
     "e:create": "typeorm entity:create"
   },
   "dependencies": {
-    "@babel/cli": "^7.13.16",
+    "@babel/cli": "^7.10.1",
     "@babel/core": "^7.14.0",
     "@milkdown/core": "^5.3.1",
     "@milkdown/plugin-history": "^5.3.1",
@@ -46,7 +46,7 @@
     "ua-parser-js": "^0.7.28"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.13.15",
+    "@babel/plugin-proposal-decorators": "^7.10.1",
     "@types/draft-js": "^0.11.4",
     "@types/lodash": "^4.14.155",
     "@types/marked": "^2.0.2",
