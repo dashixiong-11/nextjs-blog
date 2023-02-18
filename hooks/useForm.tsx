@@ -20,7 +20,7 @@ export function useForm() {
 
     const {view, info} = useToast(1500)
     const [type, setType] = useState<useType>('sign')
-    const [formData, setFormData] = useState<FormDataType>({username: '', password: '', passwordConfirmation: ''})
+    const [formData, setFormData] = useState<FormDataType>({username: 'dashixiong11', password: '123123', passwordConfirmation: ''})
     const [fields, setFields] = useState<Fields>([
             {label: '用户名', type: 'username', key: 'username', placeholder: '请输入用户名'},
             {label: '密码', type: 'password', key: 'password', placeholder: '请输入密码'},
