@@ -10,7 +10,7 @@
 /coverage
 
 # next.js
-/dist
+#/dist
 /.next/
 /out/
 /blog-data/
